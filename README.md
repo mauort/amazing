@@ -31,3 +31,5 @@ npm run build
 <!-- 
 Here I wil tell how i capitalized on AI tools through this project
 -->
+
+I installed npminstall vue-router@4
