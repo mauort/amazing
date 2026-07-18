@@ -1,15 +1,45 @@
+<script setup lang="ts">
+    import {onMounted, ref} from 'vue';
+    import { apiService } from '@/services/api';
+    const categories = ref<string[]>([])
+    const isLoading = ref<boolean>(true);
+
+    onMounted(async () => {
+    try {
+        categories.value = await apiService.getCategories();
+    } catch (error) {
+        console.error('Error when loading categories', error);
+    } finally {
+        isLoading.value = false;
+    }
+    });
+
+    import { useCart } from '@/composables/useCart';
+
+    const { cartCount } = useCart();
+
+</script>
+
 <template>
   <header class="main-header">
     <div class="container header-content">
       <div class="logo">Amazing</div>
       
       <nav class="nav-links">
-        <a href="/">Main page</a>
-        <a href="/categories">Categories</a>
+
+        <RouterLink to="/">Main page</RouterLink>
+        <ul>
+            <li v-for="category in categories" :key="category">
+                <RouterLink :to="`/category/${category}`">
+                    {{ category }}
+                </RouterLink>
+            </li>
+        </ul>
+        
       </nav>
 
       <div class="header-actions">
-        <!-- El contador se actualizará según el estado de tu carrito -->
+        <span>Shop cart ({{ cartCount }})</span>
         <button class="cart-btn">Shop cart (0)</button>
       </div>
     </div>
@@ -18,7 +48,7 @@
 
 <style scoped>
 .main-header {
-  border-bottom: 1px solid #e5e7eb; /* Un gris muy sutil */
+  border-bottom: 1px solid #c4c9d4;
   padding: var(--space-md) 0;
   background-color: var(--color-bg);
 }
@@ -35,14 +65,32 @@
   color: var(--color-primary);
 }
 
-.nav-links a {
+.nav-links  {
   margin-left: var(--space-md);
   color: var(--color-text-main);
   transition: color 0.2s;
+  display: flex;
+  align-items: center;
 }
 
-.nav-links a:hover {
+.nav-links ul {
+  display: flex;
+  list-style: none; 
+  padding: 0;
+  margin: 0;
+}
+
+.nav-links li {
+  margin-left: var(--space-md);
+}
+
+.nav-links :hover {
   color: var(--color-primary);
+}
+
+.router-link-active {
+  color: var(--color-primary);
+  font-weight: bold;
 }
 
 .cart-btn {
