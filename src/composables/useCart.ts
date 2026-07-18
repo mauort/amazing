@@ -1,15 +1,17 @@
-
+import  type {Product}  from '@/services/api';
 import { ref } from 'vue';
 
-const cartCount = ref(0);
+
+const cartItems = ref<Product[]>([]);
 
 export function useCart() {
-  const addToCart = () => {
-    cartCount.value++;
+  const addToCart = (product: Product) => {
+    cartItems.value.push(product);
   };
 
-  return {
-    cartCount,
-    addToCart
+  const removeFromCart = (productId: number) => {
+    cartItems.value = cartItems.value.filter(p => p.id !== productId);
   };
+
+  return { cartItems, addToCart, removeFromCart };
 }

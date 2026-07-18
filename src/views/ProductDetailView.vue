@@ -25,9 +25,9 @@ const loadProduct = async () => {
 };    
 watch(() => route.params.id, loadProduct);
 
-const handleAddToCart = () => {
-  addToCart(); 
-  alert('One more in the cart!');
+const handleAddToCart = (productToAdd: Product) => {
+  addToCart(productToAdd);
+  alert(`${productToAdd.title} added to cart!`);
 };
 
 onMounted(loadProduct);
