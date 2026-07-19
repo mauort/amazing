@@ -16,7 +16,7 @@
 
     import { useCart } from '@/composables/useCart';
 
-    const { cartCount } = useCart();
+    const { cartItems } = useCart();
 
 </script>
 
@@ -39,8 +39,10 @@
       </nav>
 
       <div class="header-actions">
-        <span>Shop cart ({{ cartCount }})</span>
-        <button class="cart-btn">Shop cart (0)</button>
+       
+        <RouterLink to="/cart" class="cart-btn">
+          Shop cart ({{ cartItems.length }})
+        </RouterLink>
       </div>
     </div>
   </header>
@@ -100,5 +102,9 @@
   padding: var(--space-sm) var(--space-md);
   border-radius: 4px;
   cursor: pointer;
+}
+
+.cart-btn:hover {
+  color: var(--color-primary-dark);
 }
 </style>
