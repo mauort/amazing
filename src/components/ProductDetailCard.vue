@@ -16,7 +16,7 @@ defineProps<{ product: Product }>();
       <p class="price">${{ product.price.toFixed(2) }}</p>
       <p class="description">{{ product.description }}</p>
       
-      <button class="add-btn" @click="$emit('add-to-cart', product)">
+      <button class="btn-primary" @click="$emit('add-to-cart', product)">
         Add to cart
       </button>
     </div>
@@ -25,23 +25,37 @@ defineProps<{ product: Product }>();
 
 <style scoped>
 .product-card {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  padding: 2rem;
-  max-width: 1000px;
-  margin: 0 auto;
-  align-items: start;
+  border: 1px solid var(--color-black); 
+  padding: var(--space-md);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column; 
+  transition: transform 0.2s;
+}
+
+.product-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.image-wrapper {
+  width: 100%;
+  height: 200px; 
+  overflow: hidden; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-md);
 }
 
 .image-wrapper img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; 
 }
 
 .category {
-  color: #666;
+  color: var(--color-text-muted);
   text-transform: uppercase;
   font-size: 0.8rem;
   letter-spacing: 1px;
@@ -50,22 +64,8 @@ defineProps<{ product: Product }>();
 .price {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #2c3e50;
+  color: var(--color-text-muted);
   margin: 1rem 0;
-}
-
-.add-btn {
-  background-color: #42b983;
-  color: white;
-  border: none;
-  padding: 1rem 2rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.add-btn:hover {
-  background-color: #3aa876;
 }
 
 

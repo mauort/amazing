@@ -4,6 +4,8 @@
   import { apiService } from '@/services/api';
   import { useCart } from '@/composables/useCart';
   import {useRouter} from 'vue-router'
+  import { useTheme } from '@/composables/useTheme';
+  const { isDarkMode, toggleTheme } = useTheme();
   const categories = ref<string[]>([])
   const isLoading = ref<boolean>(true);
   const { cartItems } = useCart();
@@ -65,14 +67,18 @@
         <template v-else>
             <RouterLink to="/login" class="auth-btn">Login</RouterLink>
         </template>
+        <button @click="toggleTheme" class="auth-btn">
+          {{ isDarkMode ? '☀️ Light' : '🌙 Dark' }}
+        </button>
       </div>
     </div>
+  
   </header>
 </template>
 
 <style scoped>
 .main-header {
-  border-bottom: 1px solid #c4c9d4;
+  border-bottom: 1px solid var(--color-black);
   padding: var(--space-md) 0;
   background-color: var(--color-bg);
 }
@@ -120,7 +126,7 @@
 
 .cart-btn {
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white);
   border: none;
   padding: var(--space-sm) var(--space-md);
   border-radius: 4px;
@@ -134,8 +140,8 @@
 
 
 .auth-btn {
-  background: #4a5568; 
-  color: white;
+  background: var(--color-text-muted); 
+  color: var(--color-white);
   border: none;
   padding: var(--space-sm) var(--space-md);
   border-radius: 4px;
@@ -146,6 +152,6 @@
 }
 
 .auth-btn:hover {
-  background: #2d3748;
+  background: var(--color-primary-dark);
 }
 </style>
