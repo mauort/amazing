@@ -52,6 +52,12 @@ a {
   transition: background-color 0.2s ease;
 }
 
+.btn-primary:focus {
+  outline: 3px solid #ffaa00; 
+  outline-offset: 2px;
+  box-shadow: 0 0 8px var(--color-black);
+}
+
 .btn-primary:hover {
   background-color: var(--color-primary-dark);
 }
