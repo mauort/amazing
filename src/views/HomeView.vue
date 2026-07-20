@@ -12,27 +12,34 @@ const errorMessage = ref<string | null>(null);
 const loadProducts = async () => {
   isLoading.value = true;
   errorMessage.value = null;
+  
+  
   const category = route.params.category as string;
-  try{
+  
+  try {
     if (category) {
+     
       products.value = await apiService.getProductsByCategory(category);
     } else {
+      
       products.value = await apiService.getProducts();
     }
-  } catch(error) {
-    errorMessage.value = "Oops! something went wrong while loading products, probably the API we're using didn't respond"
-    console.error(error);
-  } finally{
+  } catch (error) {
+    errorMessage.value = "We couldn't load the products.";
+  } finally {
     isLoading.value = false;
   }
-  
 };
 
 
-watch(() => route.params.category, loadProducts);
+watch(() => route.params.category, () => {
+  loadProducts();
+});
 
 
-onMounted(loadProducts);
+onMounted(() => {
+  loadProducts();
+});
 </script>
 
 <template>
