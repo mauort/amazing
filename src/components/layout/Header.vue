@@ -1,10 +1,15 @@
 <script setup lang="ts">
-    import {onMounted, ref} from 'vue';
-    import { apiService } from '@/services/api';
-    const categories = ref<string[]>([])
-    const isLoading = ref<boolean>(true);
-
-    onMounted(async () => {
+  import {onMounted, ref} from 'vue';
+  import {useAuth } from '@/composables/useAuth'
+  import { apiService } from '@/services/api';
+  import { useCart } from '@/composables/useCart';
+  import {useRouter} from 'vue-router'
+  const categories = ref<string[]>([])
+  const isLoading = ref<boolean>(true);
+  const { cartItems } = useCart();
+  const router = useRouter();
+  const { isLoggedIn, logout } = useAuth();
+  onMounted(async () => {
     try {
         categories.value = await apiService.getCategories();
     } catch (error) {
@@ -12,11 +17,21 @@
     } finally {
         isLoading.value = false;
     }
-    });
+  });
+  const handleLogout = () => {
+    logout();
+    router.push('/'); 
+  };
 
-    import { useCart } from '@/composables/useCart';
+  const handleCartClick = (event: Event) => {
+      
+      if (!isLoggedIn.value) {
+          event.preventDefault(); 
+          router.push('/login');  
+      }
+  };  
 
-    const { cartItems } = useCart();
+    
 
 </script>
 
@@ -26,7 +41,6 @@
       <div class="logo">Amazing</div>
       
       <nav class="nav-links">
-
         <RouterLink to="/">Main page</RouterLink>
         <ul>
             <li v-for="category in categories" :key="category">
@@ -35,14 +49,22 @@
                 </RouterLink>
             </li>
         </ul>
-        
       </nav>
 
       <div class="header-actions">
        
-        <RouterLink to="/cart" class="cart-btn">
+        <RouterLink to="/cart" class="cart-btn" @click="handleCartClick">
           Shop cart ({{ cartItems.length }})
         </RouterLink>
+
+     
+        <template v-if="isLoggedIn">
+            <button @click="handleLogout" class="auth-btn">Logout</button>
+        </template>
+        
+        <template v-else>
+            <RouterLink to="/login" class="auth-btn">Login</RouterLink>
+        </template>
       </div>
     </div>
   </header>
@@ -90,9 +112,10 @@
   color: var(--color-primary);
 }
 
-.router-link-active {
-  color: var(--color-primary);
-  font-weight: bold;
+.header-actions {
+  display: flex;
+  gap: 1rem; 
+  align-items: center;
 }
 
 .cart-btn {
@@ -102,9 +125,27 @@
   padding: var(--space-sm) var(--space-md);
   border-radius: 4px;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .cart-btn:hover {
   color: var(--color-primary-dark);
+}
+
+
+.auth-btn {
+  background: #4a5568; 
+  color: white;
+  border: none;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.auth-btn:hover {
+  background: #2d3748;
 }
 </style>
